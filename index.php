@@ -15,7 +15,7 @@ if ($__earlyPath === '/health') {
 }
 
 $__skipBotGate = $__earlyPath === '/robots.txt'
-    || preg_match('#^/sitemap(?:_index|\d+)\.xml$#', $__earlyPath)
+    || preg_match('#^/sitemap(?:-jobs\d+)?\.xml$#', $__earlyPath)
     || preg_match('#^/google[a-z0-9]+\.html$#', $__earlyPath)
     || strpos($__earlyPath, '/.well-known/acme-challenge/') === 0;
 
@@ -762,7 +762,7 @@ function siteFooter() {
             <div class="footer-links-list">
                 <a href="/">Home</a>
                 <a href="/search">Search Jobs</a>
-                <a href="/sitemap_index.xml">Sitemap</a>
+                <a href="/sitemap.xml">Sitemap</a>
                 <a href="/robots.txt">Robots.txt</a>
             </div>
         </div>
@@ -1182,7 +1182,7 @@ function renderSitemap($type, $id) {
     $today = date('Y-m-d');
     if ($type === 'index') {
         echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
-        for ($i = 1; $i <= $totalSitemaps; $i++) echo "    <sitemap><loc>{$baseUrl}/sitemap{$i}.xml</loc><lastmod>{$today}</lastmod></sitemap>\n";
+        for ($i = 1; $i <= $totalSitemaps; $i++) echo "    <sitemap><loc>{$baseUrl}/sitemap-jobs{$i}.xml</loc><lastmod>{$today}</lastmod></sitemap>\n";
         echo '</sitemapindex>';
     } elseif ($id >= 1 && $id <= $totalSitemaps) {
         $data = getSitemapPage($id, URLS_PER_SITEMAP);
@@ -1210,7 +1210,7 @@ function renderRobots() {
     $out = '';
     foreach ($GOOGLE_BOTS as $bot) { $out .= "User-agent: {$bot}\nAllow: /\n\n"; }
     $out .= "User-agent: *\nDisallow: /\n\n";
-    $out .= "Sitemap: {$baseUrl}/sitemap_index.xml\n";
+    $out .= "Sitemap: {$baseUrl}/sitemap.xml\n";
     echo $out;
 }
 
@@ -1251,10 +1251,10 @@ elseif (preg_match('#^/remote-([a-z0-9-]+)-jobs/page/(\d+)$#', $uri, $m)) {
     $p       = intval($m[2]);
     renderCached("cat:{$slug}:page:{$p}", PAGE_CC, function () use ($keyword, $slug, $p) { renderCategoryPage($keyword, $slug, $p); });
 }
-elseif ($uri === '/sitemap_index.xml') {
+elseif ($uri === '/sitemap.xml') {
     renderCached('sitemap:index', 'public, max-age=3600', function () { renderSitemap('index', 0); }, 'application/xml; charset=utf-8');
 }
-elseif (preg_match('#^/sitemap(\d+)\.xml$#', $uri, $m)) {
+elseif (preg_match('#^/sitemap-jobs(\d+)\.xml$#', $uri, $m)) {
     $n = intval($m[1]);
     renderCached("sitemap:{$n}", 'public, max-age=3600', function () use ($n) { renderSitemap('', $n); }, 'application/xml; charset=utf-8');
 }
