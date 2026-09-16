@@ -248,8 +248,12 @@ if (!$cfg) { http_response_code(500); die('Error: site-config.json is invalid JS
 
 $siteName    = getenv('SITE_NAME')   ?: ($cfg['siteName']   ?? 'Aspen');
 $companyName = getenv('SITE_NAME')   ?: ($cfg['companyName'] ?? $siteName);
-$siteDomain  = getenv('SITE_DOMAIN') ?: ($cfg['domain']      ?? '');
+$siteDomain  = getenv('SITE_DOMAIN') ?: ($cfg['domain'] ?? '');
 $baseUrl     = $siteDomain !== '' ? rtrim('https://' . $siteDomain, '/') : rtrim($cfg['baseUrl'] ?? '', '/');
+if ($baseUrl === '') {
+    $proto   = (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https' || ($_SERVER['HTTPS'] ?? '') === 'on') ? 'https' : 'http';
+    $baseUrl = $proto . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+}
 $tagline     = $cfg['tagline']       ?? '';
 $heroTitle   = $cfg['heroTitle']     ?? "Remote Careers<br><em>Built For You</em>";
 $metaDesc    = $cfg['metaDescription'] ?? '';
