@@ -96,8 +96,7 @@ nav,.navbar{background:#fff;border-bottom:1px solid var(--border-light);padding:
 .jobs-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.25rem;gap:1rem;flex-wrap:wrap}
 .jobs-title{font-size:1.3rem;font-weight:700;color:var(--text)}
 .jobs-count{font-size:.82rem;color:var(--muted);font-weight:500;background:var(--surface);padding:.35rem .8rem;border-radius:50px;border:1px solid var(--border-light)}
-.jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-@media(max-width:860px){.jobs-grid{grid-template-columns:repeat(2,1fr)}}
+.jobs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
 @media(max-width:540px){.jobs-grid{grid-template-columns:1fr}}
 
 /* ── JOB CARD ─────────────────────────────────────────────────── */
