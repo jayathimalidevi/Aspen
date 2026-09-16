@@ -560,6 +560,13 @@ function normalizeJob($j) {
 }
 function normalizeJobs($jobs) { return is_array($jobs) ? array_map('normalizeJob', $jobs) : $jobs; }
 
+function fmtJobCount($n) {
+    // Round down to nearest 50K and show as "600K+" — never reveals exact count
+    $rounded = floor($n / 50000) * 50000;
+    if ($rounded >= 1000) return number_format($rounded / 1000) . 'K+';
+    return number_format($rounded) . '+';
+}
+
 function getTotalJobs() {
     $data = apiGet('/api/jobs?page=1', API_TTL_INFO);
     return ($data && isset($data['pagination']['totalJobs'])) ? (int)$data['pagination']['totalJobs'] : 0;
@@ -694,7 +701,7 @@ function htmlHead($title, $desc = '', $canonical = '', $extra = '') {
 <meta name="theme-color" content="' . e($faviconBg) . '">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 ' . inlineCSS() . '
 ' . $extra . '
 </head>';
@@ -834,7 +841,7 @@ function renderHomePage($page) {
         echo '<section class="hero">
     <div class="hero-inner">
         <div>
-            <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>' . number_format($totalJobs) . '+ open positions today</div>
+            <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>' . fmtJobCount($totalJobs) . ' open positions today</div>
             <h1>' . $heroTitle . '</h1>
             <p class="hero-sub">' . e($tagline) . ' — find curated remote roles across every industry, refreshed daily.</p>
             <form action="/search" method="GET" class="hero-search">
@@ -860,7 +867,7 @@ function renderHomePage($page) {
                 </div>
                 <div class="hero-stat-card">
                     <div class="hero-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-                    <div><div class="hero-stat-num">' . number_format($totalJobs) . '</div><div class="hero-stat-lbl">Live Listings</div></div>
+                    <div><div class="hero-stat-num">' . fmtJobCount($totalJobs) . '</div><div class="hero-stat-lbl">Live Listings</div></div>
                 </div>
             </div>
         </div>
@@ -882,7 +889,7 @@ function renderHomePage($page) {
     echo '<section class="jobs-section" id="jobs">
     <div class="jobs-header">
         <h2 class="jobs-title">' . ($isHome ? 'Latest Remote Opportunities' : "Remote Jobs &mdash; Page {$page}") . '</h2>
-        <span class="jobs-count">' . number_format($totalJobs) . ' open roles</span>
+        <span class="jobs-count">' . fmtJobCount($totalJobs) . ' open roles</span>
     </div>
     <div class="jobs-grid">';
 
@@ -921,7 +928,7 @@ function renderHomePage($page) {
             echo '<section class="jobs-section" id="more-jobs">
     <div class="jobs-header">
         <h2 class="jobs-title">More Opportunities</h2>
-        <span class="jobs-count">' . number_format($totalJobs) . ' total roles</span>
+        <span class="jobs-count">' . fmtJobCount($totalJobs) . ' total roles</span>
     </div>
     <div class="jobs-grid">';
             foreach ($morePage as $job) { echo jobCardHtml($job); }
@@ -1135,7 +1142,7 @@ function renderCategoryPage($keyword, $cleanSlug, $page = 1) {
 <main><section class="jobs-section" id="jobs">
     <div class="jobs-header">
         <h2 class="jobs-title">' . ($q
-            ? number_format($totalResults) . ' Remote ' . e($displayName) . ' Jobs' . ($page > 1 ? " — Page {$page}" : '')
+            ? fmtJobCount($totalResults) . ' Remote ' . e($displayName) . ' Jobs' . ($page > 1 ? " — Page {$page}" : '')
             : 'Enter a search term') . '</h2>
     </div>
     <div class="jobs-grid">';
