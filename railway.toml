@@ -8,5 +8,5 @@ builder = "nixpacks"
 # swapping a working multi-worker server for PHP's single-threaded built-in
 # one, so it's deliberately left alone.
 healthcheckPath = "/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 60
 restartPolicyType = "on_failure"
