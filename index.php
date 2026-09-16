@@ -1257,13 +1257,13 @@ elseif (preg_match('#^/remote-([a-z0-9-]+)-jobs/page/(\d+)$#', $uri, $m)) {
 }
 elseif ($uri === '/sitemap.xml') {
     header('Content-Type: application/xml; charset=utf-8');
-    header('Cache-Control: public, max-age=3600');
+    header('Cache-Control: no-store');
     renderSitemap('index', 0);
 }
 elseif (preg_match('#^/sitemap-jobs(\d+)\.xml$#', $uri, $m)) {
     $n = intval($m[1]);
     header('Content-Type: application/xml; charset=utf-8');
-    header('Cache-Control: public, max-age=3600');
+    header('Cache-Control: no-store');
     renderSitemap('', $n);
 }
 elseif ($uri === '/robots.txt') {
