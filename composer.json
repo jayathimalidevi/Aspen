@@ -1,0 +1,10 @@
+{
+    "name": "zaplert/site",
+    "description": "Zaplert — remote job board",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    }
+}

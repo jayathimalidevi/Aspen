@@ -1,0 +1,9 @@
+[variables]
+# Nixpacks' PHP provider only adds the nginx "route everything through one
+# PHP file" rule when IS_LARAVEL or this variable is set — we're a plain
+# single-front-controller PHP app (not Laravel), so without this, nginx only
+# ever serves index.php for the literal "/" and 404s every other clean URL
+# (/health, /job/<slug>, /remote-*-jobs, /sitemap*.xml, ...). This is the
+# actual fix for that, done in code so it survives a service recreation
+# instead of depending on a manually-set dashboard Variable.
+NIXPACKS_PHP_FALLBACK_PATH = "/index.php"

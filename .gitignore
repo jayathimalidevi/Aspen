@@ -1,0 +1,5 @@
+# Runtime data — written by the app at request time, never committed.
+# Keeping these out of git so deploys can't overwrite live data with a
+# stale snapshot (and so no hand-edited numbers ever leak in).
+googlelogs.txt
+cache/
