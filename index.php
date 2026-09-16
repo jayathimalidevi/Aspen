@@ -1262,7 +1262,9 @@ elseif ($uri === '/sitemap.xml') {
 }
 elseif (preg_match('#^/sitemap-jobs(\d+)\.xml$#', $uri, $m)) {
     $n = intval($m[1]);
-    renderCached("sitemap:{$n}", 'public, max-age=3600', function () use ($n) { renderSitemap('', $n); }, 'application/xml; charset=utf-8');
+    header('Content-Type: application/xml; charset=utf-8');
+    header('Cache-Control: public, max-age=3600');
+    renderSitemap('', $n);
 }
 elseif ($uri === '/robots.txt') {
     renderRobots();
