@@ -1247,6 +1247,11 @@ elseif (preg_match('#^/page/(\d+)$#', $uri, $m)) {
     $p = intval($m[1]);
     renderCached("home:page:{$p}", PAGE_CC, function () use ($p) { renderHomePage($p); });
 }
+// Old job URL shape (/job/<slug>) → 301 to current shape (/remote-jobs/<slug>)
+elseif (preg_match('#^/job/(.+)$#', $uri, $m)) {
+    header('Location: ' . ($baseUrl !== '' ? $baseUrl : '') . '/remote-jobs/' . $m[1], true, 301);
+    exit;
+}
 elseif (preg_match('#^/remote-jobs/(.+)$#', $uri, $m)) {
     $slug = urldecode($m[1]);
     renderCached("job:{$slug}", PAGE_CC, function () use ($slug) { renderJobPage($slug); });
