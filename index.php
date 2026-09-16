@@ -1256,7 +1256,9 @@ elseif (preg_match('#^/remote-([a-z0-9-]+)-jobs/page/(\d+)$#', $uri, $m)) {
     renderCached("cat:{$slug}:page:{$p}", PAGE_CC, function () use ($keyword, $slug, $p) { renderCategoryPage($keyword, $slug, $p); });
 }
 elseif ($uri === '/sitemap.xml') {
-    renderCached('sitemap:index', 'public, max-age=3600', function () { renderSitemap('index', 0); }, 'application/xml; charset=utf-8');
+    header('Content-Type: application/xml; charset=utf-8');
+    header('Cache-Control: public, max-age=3600');
+    renderSitemap('index', 0);
 }
 elseif (preg_match('#^/sitemap-jobs(\d+)\.xml$#', $uri, $m)) {
     $n = intval($m[1]);
